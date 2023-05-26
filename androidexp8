@@ -1,0 +1,92 @@
+File: activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
+ android:paddingBottom="@dimen/activity_vertical_margin"
+ android:paddingLeft="@dimen/activity_horizontal_margin"
+ android:paddingRight="@dimen/activity_horizontal_margin"
+ android:paddingTop="@dimen/activity_vertical_margin"
+ tools:context="com.example.test.imageslider.MainActivity">
+
+
+ <android.support.v4.view.ViewPager 
+ android:id="@+id/viewPage"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent" />
+
+</RelativeLayout>
+
+
+File: MainActivity.java
+
+
+package com.example.test.imageslider;
+
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+public class MainActivity extends AppCompatActivity {
+
+ @Override
+ protected void onCreate(Bundle savedInstanceState) {
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_main);
+
+ ViewPager mViewPager = (ViewPager) findViewById(R.id.viewPage);
+ ImageAdapter adapterView = new ImageAdapter(this);
+ mViewPager.setAdapter(adapterView);
+ }
+}
+
+
+File: ImageAdapter.java
+
+package com.example.test.imageslider;
+
+import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+public class ImageAdapter extends PagerAdapter{
+ Context mContext;
+
+ ImageAdapter(Context context) {
+ this.mContext = context;
+ }
+
+ @Override
+ public boolean isViewFromObject(View view, Object object) {
+ return view == ((ImageView) object);
+ }
+
+ private int[] sliderImageId = new int[]{
+ R.drawable.image1, R.drawable.image2, R.drawable.image3,R.drawable.image4,
+R.drawable.image5,
+ };
+
+ @Override
+ public Object instantiateItem(ViewGroup container, int position) {
+ ImageView imageView = new ImageView(mContext);
+ imageView.setScaleType(ImageView.ScaleType.CENTER_CROP); 
+
+ imageView.setImageResource(sliderImageId[position]);
+ ((ViewPager) container).addView(imageView, 0);
+ return imageView;
+ }
+
+ @Override
+ public void destroyItem(ViewGroup container, int position, Object object) {
+ ((ViewPager) container).removeView((ImageView) object);
+ }
+
+ @Override
+ public int getCount() {
+ return sliderImageId.length;
+ }
+}
